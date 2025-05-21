@@ -11,27 +11,27 @@
     <!--            <div class="flex-col flex gap-4">-->
     <!--              <label>{{ key }}</label>-->
 
-    <!--              &lt;!&ndash; 颜色选择器 &ndash;&gt;-->
-    <!--              <div v-if="styleOptionsMap[key].type === 'color'" class="flex-row w-full items-center gap-4">-->
-    <!--                <Select v-model="currentOptions[key][0]" :options="styleOptionsMap[key].default" optionLabel="label"-->
-    <!--                        optionValue="value" @change="updatePreviewDebounced" class="w-3/4 items-center justify-center">-->
-    <!--                  <template #value="slotProps">-->
-    <!--                    <div class="flex items-center gap-2">-->
-    <!--                      <div class="w-4 h-4 rounded"-->
-    <!--                           :style="{ backgroundColor: slotProps.value === 'transparent' ? 'transparent' : '#' + slotProps.value }"></div>-->
-    <!--                      <span>{{ getColorLabel(slotProps.value) }}</span>-->
-    <!--                    </div>-->
-    <!--                  </template>-->
-    <!--                  <template #option="slotProps">-->
-    <!--                    <div class="flex items-center gap-2">-->
-    <!--                      <div class="w-4 h-4 rounded"-->
-    <!--                           :style="{ backgroundColor: slotProps.option.value === 'transparent' ? 'transparent' : '#' + slotProps.option.value }"></div>-->
-    <!--                      <span>{{ slotProps.option.label }}</span>-->
-    <!--                    </div>-->
-    <!--                  </template>-->
-    <!--                </Select>-->
-    <!--                <ColorPicker v-model="currentOptions[key][0]" @hide="updatePreviewDebounced" class="ml-4"/>-->
-    <!--              </div>-->
+                  <!-- 颜色选择器 -->
+<!--                  <div v-if="styleOptionsMap[key].type === 'color'" class="flex-row w-full items-center gap-4">-->
+<!--                    <Select v-model="currentOptions[key][0]" :options="styleOptionsMap[key].default" optionLabel="label"-->
+<!--                            optionValue="value" @change="updatePreviewDebounced" class="w-3/4 items-center justify-center">-->
+<!--                      <template #value="slotProps">-->
+<!--                        <div class="flex items-center gap-2">-->
+<!--                          <div class="w-4 h-4 rounded"-->
+<!--                               :style="{ backgroundColor: slotProps.value === 'transparent' ? 'transparent' : '#' + slotProps.value }"></div>-->
+<!--                          <span>{{ getColorLabel(slotProps.value) }}</span>-->
+<!--                        </div>-->
+<!--                      </template>-->
+<!--                      <template #option="slotProps">-->
+<!--                        <div class="flex items-center gap-2">-->
+<!--                          <div class="w-4 h-4 rounded"-->
+<!--                               :style="{ backgroundColor: slotProps.option.value === 'transparent' ? 'transparent' : '#' + slotProps.option.value }"></div>-->
+<!--                          <span>{{ slotProps.option.label }}</span>-->
+<!--                        </div>-->
+<!--                      </template>-->
+<!--                    </Select>-->
+<!--                    <ColorPicker v-model="currentOptions[key][0]" @hide="updatePreviewDebounced" class="ml-4"/>-->
+<!--                  </div>-->
     <!--              &lt;!&ndash; 选项下拉菜单 &ndash;&gt;-->
     <!--              <Select v-else-if="styleOptionsMap[key].type === 'select'" v-model="currentOptions[key][0]"-->
     <!--                      :options="styleOptionsMap[key].default" optionLabel="label" optionValue="value"-->
@@ -69,7 +69,7 @@
       <Tabs scrollable value="0" class="!bg-white">
         <TabList>
           <Tab v-for="(item,index) in styleOptions" :key="index" :value="index.toString()"
-               >
+          >
             {{ item.name }}
           </Tab>
         </TabList>
@@ -79,19 +79,38 @@
               <div v-for="(style, index) in defaultStyles" :key="index"
                    class="flex flex-col col-span-1 items-center justify-center ">
                 <img @click="selectStyle(style.value)" :src="doCreateAvatar(style)"
+                     :class="style.value === selectedStyle ? 'ring-3 ring-blue-400 ring-offset-4' : ''"
                      class=" rounded-2xl w-24 h-24 hover:ring-3 cursor-pointer hover:ring-blue-400 hover:ring-offset-4"/>
               </div>
             </div>
           </TabPanel>
           <TabPanel value="1">
-<!--            <div v-for="(style, index) in commonColors" :key="index"-->
-<!--                 class="flex flex-col col-span-1 items-center justify-center ">-->
-<!--              <img @click="selectStyle(style.value)" :src="doCreateAvatar(style.value, 'Tyrone', style.background)"-->
-<!--                   class=" rounded-2xl w-24 h-24 hover:ring-3 cursor-pointer hover:ring-blue-400 hover:ring-offset-4"/>-->
-<!--            </div>-->
+            <div class="grid grid-cols-8 gap-4 ">
+              <div class="ol-span-1 items-center justify-center relative">
+                <div class="items-center flex justify-center">
+                    <img @click="toggleBackgroundColorPicker"
+                        :src="getAvatarWithCurrentOption()"
+                         :class="currentOptions['backgroundColor'][0] === this.defaultStyles.find(style => style.value === this.selectedStyle)['config']['backgroundColor'][0] ? 'ring-3 ring-blue-400 ring-offset-4' : ''"
+                        class=" !rounded-2xl w-24 h-24 hover:ring-3 cursor-pointer z-0" />
+                </div>
+                <ColorPicker v-if="backgroundColorPickerVisible"
+                             v-model="currentOptions['backgroundColor'][0]"
+                             inline
+                             @update:modelValue="updatePreviewAfterColorChange"
+                             class=" inset-24 !absolute z-10" />
+              </div>
+              <div v-for="(option, index) in currentStyleConfig.originalOptions.get('backgroundColor').default"
+                   :key="index"
+                   class="flex flex-col col-span-1 items-center justify-center ">
+                <img @click="selectOption('backgroundColor',option.value)"
+                     :class="this.defaultStyles.find(style => style.value === this.selectedStyle)['config']['backgroundColor'][0] === option.value? 'ring-3 ring-blue-400 ring-offset-4' : ''"
+                     :src="doCreateAvatarWithSpecConfig('backgroundColor',option.value)"
+                     class=" rounded-2xl w-24 h-24 hover:ring-3 cursor-pointer hover:ring-blue-400 hover:ring-offset-4"/>
+              </div>
+            </div>
           </TabPanel>
           <TabPanel v-for="(item, index) in styleOptions.slice(2)" :key="index+2" :value="(index+2).toString()"
-                    >
+          >
             {{ item }}
           </TabPanel>
         </TabPanels>
@@ -126,8 +145,14 @@ export default {
       currentOptions: {},
       customAvatar: {},
       selectedStyle: 'adventurer',
+      currentStyleOriginalOptions: {},
+
+
 
       visible: this.modelValue,
+      backgroundColorPickerVisible: false,
+
+
       activeCategory: 'all',
       debounceTimer: null,
       isUpdating: false,
@@ -227,22 +252,50 @@ export default {
     },
     selectedStyle() {
       this.updatePreviewDebounced();
+    },
+    defaultStyles(){
+      this.updatePreviewDebounced();
     }
   },
-  created() {
 
-    this.defaultStyles = this.defaultStyles.map(style => ({
-      ...style,
-      config: {
-        seed: "Tyrone",
-        backgroundColor: [this.getRandomColor()]
-      }
-    }));
-
-    // 初始化默认选项
-    this.selectStyle();
-  },
   methods: {
+
+    toggleBackgroundColorPicker() {
+      this.backgroundColorPickerVisible = !this.backgroundColorPickerVisible;
+      
+      // 如果选择器打开，添加点击监听器
+      if (this.backgroundColorPickerVisible) {
+        // 使用 nextTick 确保 DOM 更新后再添加事件监听
+        this.$nextTick(() => {
+          document.addEventListener('click', this.handleOutsideClick);
+        });
+      }
+    },
+    
+    updatePreviewAfterColorChange(value) {
+      this.defaultStyles.find(style => style.value === this.selectedStyle).config.backgroundColor[0] = value;
+      this.updatePreviewDebounced();
+      // 不立即关闭，让用户可以继续选择
+    },
+
+    openBackgroundColorPicker(){
+      this.backgroundColorPickerVisible = true
+    },
+    getAvatarWithCurrentOption(){
+      let dicebearCollectionElement = dicebearCollection[this.selectedStyle];
+      let config = createAvatar(dicebearCollectionElement, {
+        ...this.defaultStyles.find(style => style.value === this.selectedStyle).config,
+      });
+      return config.toDataUri();
+    },
+    doCreateAvatarWithSpecConfig(optionKey, optionValue) {
+      let dicebearCollectionElement = dicebearCollection[this.selectedStyle];
+      let config = createAvatar(dicebearCollectionElement, {
+        ...this.defaultStyles.find(style => style.value === this.selectedStyle).config,
+        [optionKey]: [optionValue]
+      });
+      return config.toDataUri();
+    },
     doCreateAvatar(style) {
       let dicebearCollectionElement = dicebearCollection[style.value];
       let config = createAvatar(dicebearCollectionElement, {
@@ -253,14 +306,8 @@ export default {
     },
 
     getPreview() {
-      console.log(this.selectedStyle)
-      console.log(this.defaultStyles)
-
-      let targetStyle = this.defaultStyles.find((item)=> item.value === this.selectedStyle );
-
-      console.log(targetStyle)
       let config = createAvatar(dicebearCollection[this.selectedStyle], {
-        ...this.currentOptions
+        ...this.defaultStyles.find(style => style.value === this.selectedStyle).config,
       });
       return config.toDataUri();
     },
@@ -284,8 +331,16 @@ export default {
     selectStyle(styleValue) {
       this.selectedStyle = styleValue || this.selectedStyle;
       this.loadStyleOptions(this.selectedStyle);
-      this.currentStyleConfig = this.currentOptions
+      this.currentStyleConfig = this.defaultStyles.find(style => style.value === this.selectedStyle);
+
       console.log(this.currentStyleConfig)
+      console.log(this.styleOptions)
+    },
+    selectOption(key,value){
+      console.log();
+      console.log(this.defaultStyles[this.selectedStyle]);
+      this.defaultStyles.find(style => style.value === this.selectedStyle)['config'][key] = [value];
+
     },
     resetStyleOptions() {
       this.styleOptions = [{name: 'Styles', type: 'select', default: false}, {
@@ -299,8 +354,8 @@ export default {
       this.currentOptions = {};
 
       this.resetStyleOptions();
-      let styleOptions = this.getStyleOptions(styleValue);
-      this.styleOptions = [...this.styleOptions, ...styleOptions];
+      let originalOptions = this.getStyleOptions(styleValue);
+      this.styleOptions = [...this.styleOptions, ...originalOptions];
 
       console.log(this.styleOptions);
 
@@ -322,6 +377,24 @@ export default {
       // 设置固定大小
       this.currentOptions['size'] = 128;
 
+    },
+    initDefaultStyleOptions(styleName) {
+      let originalOptions = this.getStyleOptions(styleName);
+      let convertedOptions = {};
+      for (let i = 0; i < originalOptions.length; i++) {
+        if (i <= 1) continue;
+        let option = originalOptions[i];
+        if (option.type === 'select') {
+          convertedOptions[option.name] = [option.default[Math.floor(Math.random() * option.default.length)].value];
+        } else if (option.type === 'color') {
+          convertedOptions[option.name] = [option.default[Math.floor(Math.random() * option.default.length)].value];
+        } else {
+          convertedOptions[option.name] = option.default;
+        }
+      }
+      convertedOptions['size'] = 128;
+      console.log(convertedOptions);
+      return {originalOptions, convertedOptions};
     },
     getStyleOptions(styleName) {
       // 获取指定样式支持的所有选项
@@ -434,6 +507,21 @@ export default {
         this.$forceUpdate(); // 强制组件重新渲染，触发计算属性 avatarPreview
       }, 300); // 300ms防抖时间
     },
+    handleOutsideClick(event) {
+      // 获取颜色选择器元素
+      const colorPicker = document.querySelector('.p-colorpicker');
+      // 获取触发颜色选择器的图片元素
+      const imgTrigger = document.querySelector('[class*="!rounded-2xl w-24 h-24 hover:ring-3 cursor-pointer z-0"]');
+      
+      // 如果点击的不是颜色选择器内部元素且不是触发的图片，则关闭选择器
+      if (colorPicker && 
+          !colorPicker.contains(event.target) && 
+          (!imgTrigger || !imgTrigger.contains(event.target))) {
+        this.backgroundColorPickerVisible = false;
+        // 移除事件监听器
+        document.removeEventListener('click', this.handleOutsideClick);
+      }
+    },
     handleSliderInput() {
       // 当滑块正在移动时，标记为正在更新
       this.isUpdating = true;
@@ -473,7 +561,33 @@ export default {
       const color = this.commonColors.find((c) => c.value === '#' + colorValue);
       return color ? color.label : '自定义颜色';
     }
-  }
+  },
+  created() {
+
+    this.defaultStyles = this.defaultStyles.map(style => {
+      let {originalOptions, convertedOptions} = this.initDefaultStyleOptions(style.value);
+
+      return {
+        ...style,
+        originalOptions: originalOptions.reduce((acc, item) => {
+          acc.set(item.name, item);
+          return acc;
+        }, new Map()),
+
+        config: {
+          seed: "Tyrone",
+          ...convertedOptions
+        }
+      };
+    });
+    console.log(this.defaultStyles)
+    this.selectStyle();
+
+  },
+  beforeUnmount() {
+    document.removeEventListener('click', this.handleOutsideClick);
+  },
+
 };
 </script>
 
