@@ -76,15 +76,19 @@
         <TabPanels>
           <TabPanel value="0">
             <div class="grid grid-cols-8 gap-4">
-              <div v-for="(style, index) in allStyles" :key="index"
+              <div v-for="(style, index) in defaultStyles" :key="index"
                    class="flex flex-col col-span-1 items-center justify-center ">
-                <img @click="selectStyle(style.value)" :src="doCreateAvatar(style.value, 'Tyrone', style.background)"
+                <img @click="selectStyle(style.value)" :src="doCreateAvatar(style)"
                      class=" rounded-2xl w-24 h-24 hover:ring-3 cursor-pointer hover:ring-blue-400 hover:ring-offset-4"/>
               </div>
             </div>
           </TabPanel>
           <TabPanel value="1">
-
+<!--            <div v-for="(style, index) in commonColors" :key="index"-->
+<!--                 class="flex flex-col col-span-1 items-center justify-center ">-->
+<!--              <img @click="selectStyle(style.value)" :src="doCreateAvatar(style.value, 'Tyrone', style.background)"-->
+<!--                   class=" rounded-2xl w-24 h-24 hover:ring-3 cursor-pointer hover:ring-blue-400 hover:ring-offset-4"/>-->
+<!--            </div>-->
           </TabPanel>
           <TabPanel v-for="(item, index) in styleOptions.slice(2)" :key="index+2" :value="(index+2).toString()"
                     >
@@ -115,16 +119,10 @@ export default {
   emits: ['update:modelValue', 'select'],
 
   data() {
-    // const arr = ['Aneka', 'Bailey', 'Callie', 'Dusty', 'Echo', 'Felix', 'Ginger', 'Hunter', 'Indigo', 'Jasper', 'Keeper', 'Luna', 'Milo', 'Nova', 'Ollie', 'Pepper', 'Quinn', 'Riley', 'Sunny', 'Toby'];
-    // const seedOptions = [];
-    // arr.forEach((item) => {
-    //     seedOptions.push({
-    //         seed: item
-    //     });
-    // });
-
     return {
-      currentStyle: {},
+      //当前的style确定配置
+      currentStyleConfig: {},
+      //当前的style里面拥有的option
       currentOptions: {},
       customAvatar: {},
       selectedStyle: 'adventurer',
@@ -139,7 +137,7 @@ export default {
         {name: 'Background Color', type: 'select', default: false}
       ],
       styleOptionsMap: {},
-      allStyles: [
+      defaultStyles: [
         {label: 'Adventurer', value: 'adventurer'},
         {label: 'Adventurer Neutral', value: 'adventurerNeutral'},
         {label: 'Avataaars', value: 'avataaars'},
@@ -213,11 +211,8 @@ export default {
     };
   },
   computed: {
-    currentStyles() {
-      if (this.activeCategory === 'all') {
-        return this.allStyles;
-      }
-      // return this.allStyles.filter((style) => style.category === this.activeCategory);
+    currentStyle() {
+      return this.currentStyleConfig
     },
     avatarPreview() {
       return this.getPreview();
@@ -235,28 +230,36 @@ export default {
     }
   },
   created() {
-    this.allStyles = this.allStyles.map(style => ({
+
+    this.defaultStyles = this.defaultStyles.map(style => ({
       ...style,
-      background: this.getRandomColor() // 为每个样式添加默认背景属性
+      config: {
+        seed: "Tyrone",
+        backgroundColor: [this.getRandomColor()]
+      }
     }));
 
     // 初始化默认选项
     this.selectStyle();
   },
   methods: {
-    doCreateAvatar(style, seed, backgroundColor) {
-      let dicebearCollectionElement = dicebearCollection[style];
+    doCreateAvatar(style) {
+      let dicebearCollectionElement = dicebearCollection[style.value];
       let config = createAvatar(dicebearCollectionElement, {
         // ...this.currentOptions,
-        seed: seed,
-        backgroundColor: [backgroundColor]
+        ...style.config
       });
       return config.toDataUri();
     },
 
     getPreview() {
-      let dicebearCollectionElement = dicebearCollection[this.selectedStyle];
-      let config = createAvatar(dicebearCollectionElement, {
+      console.log(this.selectedStyle)
+      console.log(this.defaultStyles)
+
+      let targetStyle = this.defaultStyles.find((item)=> item.value === this.selectedStyle );
+
+      console.log(targetStyle)
+      let config = createAvatar(dicebearCollection[this.selectedStyle], {
         ...this.currentOptions
       });
       return config.toDataUri();
@@ -281,7 +284,8 @@ export default {
     selectStyle(styleValue) {
       this.selectedStyle = styleValue || this.selectedStyle;
       this.loadStyleOptions(this.selectedStyle);
-      console.log(this.currentOptions)
+      this.currentStyleConfig = this.currentOptions
+      console.log(this.currentStyleConfig)
     },
     resetStyleOptions() {
       this.styleOptions = [{name: 'Styles', type: 'select', default: false}, {
@@ -317,6 +321,7 @@ export default {
       }
       // 设置固定大小
       this.currentOptions['size'] = 128;
+
     },
     getStyleOptions(styleName) {
       // 获取指定样式支持的所有选项
