@@ -11,45 +11,45 @@
     <!--            <div class="flex-col flex gap-4">-->
     <!--              <label>{{ key }}</label>-->
 
-                  <!-- 颜色选择器 -->
-<!--                  <div v-if="styleOptionsMap[key].type === 'color'" class="flex-row w-full items-center gap-4">-->
-<!--                    <Select v-model="currentOptions[key][0]" :options="styleOptionsMap[key].default" optionLabel="label"-->
-<!--                            optionValue="value" @change="updatePreviewDebounced" class="w-3/4 items-center justify-center">-->
-<!--                      <template #value="slotProps">-->
-<!--                        <div class="flex items-center gap-2">-->
-<!--                          <div class="w-4 h-4 rounded"-->
-<!--                               :style="{ backgroundColor: slotProps.value === 'transparent' ? 'transparent' : '#' + slotProps.value }"></div>-->
-<!--                          <span>{{ getColorLabel(slotProps.value) }}</span>-->
-<!--                        </div>-->
-<!--                      </template>-->
-<!--                      <template #option="slotProps">-->
-<!--                        <div class="flex items-center gap-2">-->
-<!--                          <div class="w-4 h-4 rounded"-->
-<!--                               :style="{ backgroundColor: slotProps.option.value === 'transparent' ? 'transparent' : '#' + slotProps.option.value }"></div>-->
-<!--                          <span>{{ slotProps.option.label }}</span>-->
-<!--                        </div>-->
-<!--                      </template>-->
-<!--                    </Select>-->
-<!--                    <ColorPicker v-model="currentOptions[key][0]" @hide="updatePreviewDebounced" class="ml-4"/>-->
-<!--                  </div>-->
+    <!-- 颜色选择器 -->
+    <!--                  <div v-if="styleOptionsMap[key].type === 'color'" class="flex-row w-full items-center gap-4">-->
+    <!--                    <Select v-model="currentOptions[key][0]" :options="styleOptionsMap[key].default" optionLabel="label"-->
+    <!--                            optionValue="value" @change="updatePreviewDebounced" class="w-3/4 items-center justify-center">-->
+    <!--                      <template #value="slotProps">-->
+    <!--                        <div class="flex items-center gap-2">-->
+    <!--                          <div class="w-4 h-4 rounded"-->
+    <!--                               :style="{ backgroundColor: slotProps.value === 'transparent' ? 'transparent' : '#' + slotProps.value }"></div>-->
+    <!--                          <span>{{ getColorLabel(slotProps.value) }}</span>-->
+    <!--                        </div>-->
+    <!--                      </template>-->
+    <!--                      <template #option="slotProps">-->
+    <!--                        <div class="flex items-center gap-2">-->
+    <!--                          <div class="w-4 h-4 rounded"-->
+    <!--                               :style="{ backgroundColor: slotProps.option.value === 'transparent' ? 'transparent' : '#' + slotProps.option.value }"></div>-->
+    <!--                          <span>{{ slotProps.option.label }}</span>-->
+    <!--                        </div>-->
+    <!--                      </template>-->
+    <!--                    </Select>-->
+    <!--                    <ColorPicker v-model="currentOptions[key][0]" @hide="updatePreviewDebounced" class="ml-4"/>-->
+    <!--                  </div>-->
     <!--              &lt;!&ndash; 选项下拉菜单 &ndash;&gt;-->
     <!--              <Select v-else-if="styleOptionsMap[key].type === 'select'" v-model="currentOptions[key][0]"-->
     <!--                      :options="styleOptionsMap[key].default" optionLabel="label" optionValue="value"-->
     <!--                      @change="updatePreviewDebounced" class="w-full"/>-->
     <!--              &lt;!&ndash; 滑块控制 &ndash;&gt;-->
-    <!--              <div v-else-if="styleOptionsMap[key].type === 'range'" class="w-10/12 flex flex-col gap-4">-->
-    <!--                <Slider v-model="currentOptions[key]" :min="styleOptionsMap[key].min" :max="styleOptionsMap[key].max"-->
-    <!--                        :step="styleOptionsMap[key].step" @change="handleSliderInput"-->
-    <!--                        @slideend="updatePreviewDebounced"/>-->
-    <!--                <div class="text-center">{{ currentOptions[key] }}</div>-->
-    <!--              </div>-->
-    <!--              &lt;!&ndash; 开关控制 &ndash;&gt;-->
-    <!--              <ToggleSwitch v-else-if="styleOptionsMap[key].type === 'switch'" v-model="currentOptions[key]"-->
-    <!--                            @change="updatePreviewDebounced"/>-->
-    <!--              &lt;!&ndash; 文本输入 &ndash;&gt;-->
-    <!--              <InputText v-else-if="styleOptionsMap[key].type === 'text'" v-model="currentOptions[key]"-->
-    <!--                         @input="updatePreviewDebounced" class="w-full"/>-->
-    <!--            </div>-->
+    <!--                  <div v-else-if="styleOptionsMap[key].type === 'range'" class="w-10/12 flex flex-col gap-4">-->
+    <!--                    <Slider v-model="currentOptions[key]" :min="styleOptionsMap[key].min" :max="styleOptionsMap[key].max"-->
+    <!--                            :step="styleOptionsMap[key].step" @change="handleSliderInput"-->
+    <!--                            @slideend="updatePreviewDebounced"/>-->
+    <!--                    <div class="text-center">{{ currentOptions[key] }}</div>-->
+    <!--                  </div>-->
+    <!--                  &lt;!&ndash; 开关控制 &ndash;&gt;-->
+    <!--                  <ToggleSwitch v-else-if="styleOptionsMap[key].type === 'switch'" v-model="currentOptions[key]"-->
+    <!--                                @change="updatePreviewDebounced"/>-->
+    <!-- 文本输入 -->
+    <!--                  <InputText v-else-if="styleOptionsMap[key].type === 'text'" v-model="currentOptions[key]"-->
+    <!--                             @input="updatePreviewDebounced" class="w-full"/>-->
+    <!--                </div>-->
     <!--          </div>-->
     <!--        </div>-->
     <!--      </div>-->
@@ -88,16 +88,17 @@
             <div class="grid grid-cols-8 gap-4 ">
               <div class="ol-span-1 items-center justify-center relative">
                 <div class="items-center flex justify-center">
-                    <img @click="toggleBackgroundColorPicker"
-                        :src="getAvatarWithCurrentOption()"
-                         :class="currentOptions['backgroundColor'][0] === this.defaultStyles.find(style => style.value === this.selectedStyle)['config']['backgroundColor'][0] ? 'ring-3 ring-blue-400 ring-offset-4' : ''"
-                        class=" !rounded-2xl w-24 h-24 hover:ring-3 cursor-pointer z-0" />
+                  <img @click="toggleBackgroundColorPicker"
+                       :src="getAvatarWithCurrentOption()"
+                       :class="currentOptions['backgroundColor'][0] === this.defaultStyles.find(style => style.value === this.selectedStyle)['config']['backgroundColor'][0] ? 'ring-3 ring-blue-400 ring-offset-4' : ''"
+                       class=" !rounded-2xl w-24 h-24 hover:ring-3 cursor-pointer z-0"/>
                 </div>
+                <i class="pi pi-palette absolute z-2 inset-x-20  inset-y-16" style="font-size: 1.5rem"></i>
                 <ColorPicker v-if="backgroundColorPickerVisible"
                              v-model="currentOptions['backgroundColor'][0]"
                              inline
                              @update:modelValue="updatePreviewAfterColorChange"
-                             class=" inset-24 !absolute z-10" />
+                             class=" inset-24 !absolute z-10"/>
               </div>
               <div v-for="(option, index) in currentStyleConfig.originalOptions.get('backgroundColor').default"
                    :key="index"
@@ -111,7 +112,58 @@
           </TabPanel>
           <TabPanel v-for="(item, index) in styleOptions.slice(2)" :key="index+2" :value="(index+2).toString()"
           >
-            {{ item }}
+            <div v-if="item.type==='select'" class="grid grid-cols-8 gap-4 ">
+              <div v-for="(option, index) in currentStyleConfig.originalOptions.get(item.name).default"
+                   :key="index"
+                   class="flex flex-col col-span-1 items-center justify-center ">
+                <img @click="selectOption(item.name,option.value)"
+                     :class="this.defaultStyles.find(style => style.value === this.selectedStyle)['config'][item.name][0] === option.value? 'ring-3 ring-blue-400 ring-offset-4' : ''"
+                     :src="doCreateAvatarWithSpecConfig(item.name,option.value)"
+                     class=" rounded-2xl w-24 h-24 hover:ring-3 cursor-pointer hover:ring-blue-400 hover:ring-offset-4"/>
+              </div>
+            </div>
+            <div v-if="item.type==='color'">
+              <div class="ol-span-1 items-center justify-center relative">
+                <div class="items-center flex justify-center">
+                  <img @click="toggleBackgroundColorPicker"
+                       :src="getAvatarWithCurrentOption()"
+                       :class="currentOptions[item.name][0] === this.defaultStyles.find(style => style.value === this.selectedStyle)['config'][item.name][0] ? 'ring-3 ring-blue-400 ring-offset-4' : ''"
+                       class=" !rounded-2xl w-24 h-24 hover:ring-3 cursor-pointer z-0"/>
+                </div>
+                <i class="pi pi-palette absolute z-2 inset-x-20  inset-y-16" style="font-size: 1.5rem"></i>
+                <ColorPicker v-if="backgroundColorPickerVisible"
+                             v-model="currentOptions[item.name][0]"
+                             inline
+                             @update:modelValue="updatePreviewAfterColorChange"
+                             class=" inset-24 !absolute z-10"/>
+              </div>
+              <div v-for="(option, index) in currentStyleConfig.originalOptions.get(item.name).default"
+                   :key="index"
+                   class="flex flex-col col-span-1 items-center justify-center ">
+                <img @click="selectOption(item.name ,option.value)"
+                     :class="this.defaultStyles.find(style => style.value === this.selectedStyle)['config'][item.name][0] === option.value? 'ring-3 ring-blue-400 ring-offset-4' : ''"
+                     :src="doCreateAvatarWithSpecConfig(item.name ,option.value)"
+                     class=" rounded-2xl w-24 h-24 hover:ring-3 cursor-pointer hover:ring-blue-400 hover:ring-offset-4"/>
+              </div>
+            </div>
+            <div v-if="item.type==='range'" class="m-4  flex flex-row gap-8 justify-items-start items-center">
+              <InputText v-model="defaultStyles.find(style => style.value === this.selectedStyle)['config'][item.name]"
+                         class="!w-20"/>
+              <div class="w-48 flex flex-col justify-center">
+                <Slider v-model="defaultStyles.find(style => style.value === this.selectedStyle)['config'][item.name]"
+                        :min="defaultStyles.find(style => style.value === this.selectedStyle)['config'][item.min]"
+                        :max="defaultStyles.find(style => style.value === this.selectedStyle)['config'][item.max]"
+                        :step="defaultStyles.find(style => style.value === this.selectedStyle)['config'][item.step]"
+                        @change="handleSliderInput"
+                />
+              </div>
+            </div>
+            <div v-if="item.type==='switch'" class="m-4">
+
+              <ToggleSwitch
+                  v-model="defaultStyles.find(style => style.value === this.selectedStyle)['config'][item.name]"
+                  @change="updatePreviewDebounced"/>
+            </div>
           </TabPanel>
         </TabPanels>
       </Tabs>
@@ -146,7 +198,6 @@ export default {
       customAvatar: {},
       selectedStyle: 'adventurer',
       currentStyleOriginalOptions: {},
-
 
 
       visible: this.modelValue,
@@ -253,7 +304,7 @@ export default {
     selectedStyle() {
       this.updatePreviewDebounced();
     },
-    defaultStyles(){
+    defaultStyles() {
       this.updatePreviewDebounced();
     }
   },
@@ -262,7 +313,7 @@ export default {
 
     toggleBackgroundColorPicker() {
       this.backgroundColorPickerVisible = !this.backgroundColorPickerVisible;
-      
+
       // 如果选择器打开，添加点击监听器
       if (this.backgroundColorPickerVisible) {
         // 使用 nextTick 确保 DOM 更新后再添加事件监听
@@ -271,17 +322,17 @@ export default {
         });
       }
     },
-    
+
     updatePreviewAfterColorChange(value) {
       this.defaultStyles.find(style => style.value === this.selectedStyle).config.backgroundColor[0] = value;
       this.updatePreviewDebounced();
       // 不立即关闭，让用户可以继续选择
     },
 
-    openBackgroundColorPicker(){
+    openBackgroundColorPicker() {
       this.backgroundColorPickerVisible = true
     },
-    getAvatarWithCurrentOption(){
+    getAvatarWithCurrentOption() {
       let dicebearCollectionElement = dicebearCollection[this.selectedStyle];
       let config = createAvatar(dicebearCollectionElement, {
         ...this.defaultStyles.find(style => style.value === this.selectedStyle).config,
@@ -336,7 +387,7 @@ export default {
       console.log(this.currentStyleConfig)
       console.log(this.styleOptions)
     },
-    selectOption(key,value){
+    selectOption(key, value) {
       console.log();
       console.log(this.defaultStyles[this.selectedStyle]);
       this.defaultStyles.find(style => style.value === this.selectedStyle)['config'][key] = [value];
@@ -512,10 +563,10 @@ export default {
       const colorPicker = document.querySelector('.p-colorpicker');
       // 获取触发颜色选择器的图片元素
       const imgTrigger = document.querySelector('[class*="!rounded-2xl w-24 h-24 hover:ring-3 cursor-pointer z-0"]');
-      
+
       // 如果点击的不是颜色选择器内部元素且不是触发的图片，则关闭选择器
-      if (colorPicker && 
-          !colorPicker.contains(event.target) && 
+      if (colorPicker &&
+          !colorPicker.contains(event.target) &&
           (!imgTrigger || !imgTrigger.contains(event.target))) {
         this.backgroundColorPickerVisible = false;
         // 移除事件监听器
