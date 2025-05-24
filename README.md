@@ -2,12 +2,15 @@
 
 点击切换中文版文档: [README-ZH.md](README-ZH.md)
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/TyroneMax/hephaestuses-avatar-generator.git)
 ## Project Overview
 
 This is an interactive avatar generator based on the DiceBear API, integrated with PrimeVue and TailwindCSS v4. The
 project allows users to select different avatar styles, customize colors and various attributes, preview and generate
 usable avatars in real-time. Background colors dynamically change with the avatar colors, providing a harmonious visual
 experience.
+
+**Live Preview:** [https://hephaestuses-avatar-generator.vercel.app/](https://hephaestuses-avatar-generator.vercel.app/)
 
 ## Features
 
@@ -44,8 +47,8 @@ The project primarily consists of the following components:
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/dicebear-avatar-generator.git
-cd dicebear-avatar-generator
+git clone https://github.com/TyroneMax/hephaestuses-avatar-generator.git
+cd hephaestuses-avatar-generator
 ```
 
 2. Install dependencies:

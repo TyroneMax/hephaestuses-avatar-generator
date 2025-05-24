@@ -2,10 +2,14 @@
 
 Click to switch to English documentation: [README.md](README.md)
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/TyroneMax/hephaestuses-avatar-generator.git)
+
 ## 项目概述
 
 这是一个基于 DiceBear API 的交互式头像生成器，集成了 PrimeVue 和 TailwindCSS
 v4。项目允许用户选择不同的头像风格、自定义颜色和各种属性，实时预览并生成可用的头像。背景颜色会随着头像颜色动态变化，提供和谐的视觉体验。
+
+**在线预览：** [https://hephaestuses-avatar-generator.vercel.app/](https://hephaestuses-avatar-generator.vercel.app/)
 
 ## 功能特点
 
@@ -17,7 +21,7 @@ v4。项目允许用户选择不同的头像风格、自定义颜色和各种属
     - 颜色选择器支持
     - 各种头像属性调整
 - 响应式设计
-- 生成可分享的头像 URL
+- **生成可分享的头像 URL**
 
 ## 技术栈
 
@@ -42,8 +46,8 @@ v4。项目允许用户选择不同的头像风格、自定义颜色和各种属
 1. 克隆仓库：
 
 ```bash
-git clone https://github.com/yourusername/dicebear-avatar-generator.git
-cd dicebear-avatar-generator
+git clone https://github.com/TyroneMax/hephaestuses-avatar-generator.git
+cd hephaestuses-avatar-generator
 ```
 
 2. 安装依赖：
