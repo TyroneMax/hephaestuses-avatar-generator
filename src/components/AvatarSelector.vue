@@ -11,7 +11,7 @@
     <div>
       <Tabs scrollable value="0" class="!bg-white">
         <TabList>
-          <Tab v-for="(item,index) in styleOptions.filter(item => !item.name.includes('Probability'))" :key="index"
+          <Tab v-for="(item, index) in styleOptions.filter(item => !item.name.includes('Probability') && (item.name !== 'backgroundColor' || index === 1))" :key="index"
                :value="index.toString()"
           >
             {{ formatOptionName(item.name) }}
@@ -85,7 +85,7 @@
               </div>
             </div>
           </TabPanel>
-          <TabPanel v-for="(item, index) in styleOptions.slice(2).filter(item => !item.name.includes('Probability'))"
+          <TabPanel v-for="(item, index) in styleOptions.slice(2).filter(item => !item.name.includes('Probability') && (item.name !== 'backgroundColor'))"
                     :key="index+2" :value="(index+2).toString()"
           >
             <div v-if="item.type==='select'"
@@ -147,7 +147,7 @@
                   </svg>
                 </div>
 
-                <Popover :ref="this.selectedStyle+item.name">
+                <Popover :ref="this.selectedStyle+item.name" appendTo="self">
                   <ColorPicker v-model="currentOptions[item.name][0]"
                                inline
                                @update:modelValue="updatePreviewAfterColorChange($event, item.name)"/>
@@ -427,7 +427,7 @@ export default {
             default: config.default !== undefined ? config.default : ''
           };
           uiOptions.push(uiOption);
-        } else if (key ==='radius'){
+        } else if (key === 'radius') {
           const uiOption = {
             name: key,
             type: 'range',
@@ -523,17 +523,7 @@ export default {
     this.selectStyle();
     this.emitBackgroundColor();
   },
-  beforeUnmount() {
-    this.defaultStyles.forEach(style => {
-      if (style.config) {
-        Object.keys(style.config).forEach(key => {
-          if (key.endsWith('EventHandler') && style.config[key]) {
-            document.removeEventListener('click', style.config[key]);
-          }
-        });
-      }
-    });
-  },
+
 };
 </script>
 
