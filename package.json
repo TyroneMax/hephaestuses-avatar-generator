@@ -1,7 +1,9 @@
 {
-    "name": "primevue-quickstart-tailwindv4",
-    "version": "0.0.0",
+    "name": "hephaestuses-avatar-generator",
+    "version": "1.0.0",
     "type": "module",
+    "description": "A Vue 3 application for generating avatars using DiceBear and PrimeVue.",
+    "author": "Tyrone",
     "scripts": {
         "dev": "vite",
         "build": "vite build",
